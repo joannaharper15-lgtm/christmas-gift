@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Family Christmas Lists</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='12' width='24' height='17' rx='2' fill='%23c8102e'/%3E%3Crect x='2' y='8' width='28' height='6' rx='2' fill='%231e6b45'/%3E%3Crect x='14' y='8' width='4' height='21' fill='%23e0a526'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;600;700;800;900&display=swap">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Layout: a single column workspace — home is a wall of gift tags (one per person); each person's page is an add-item bench above a grid of product cards. */
+:root {
+  /* Festive: evergreen + candy-cane red + tinsel gold on a snowy page */
+  --bg: #f6f1ea;
+  --surface: #fffdf9;
+  --surface-2: #f0e7dc;
+  --ink: #1f3b2c;
+  --ink-2: #5d6f63;
+  --line: #e4d8c8;
+  --berry: #c8102e;        /* candy-cane red */
+  --berry-ink: #ffffff;
+  --gold: #e0a526;
+  --pine: #1e6b45;         /* evergreen */
+  --teal-ink: #1e6b45;
+  --forest: #123a28;
+  --photo: #ffffff;
+  --stripe: repeating-linear-gradient(-45deg, #c8102e 0 10px, #ffffff 10px 20px);
+  --shadow: 0 1px 2px rgba(31,59,44,.06), 0 10px 24px rgba(31,59,44,.10);
+  --f-display: "Mountains of Christmas", "Georgia", cursive;
+  --f-round: "Nunito", "Avenir", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Nunito", "Avenir", "Helvetica Neue", Arial, sans-serif;
+  --f-num: "Nunito", "Avenir", Arial, sans-serif;
+  --r: 16px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5;
+}
+.wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+  display: flex; flex-direction: column; gap: 28px;
+}
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.05; }
+h2 { font-size: 22px; }
+.eyebrow { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--berry); }
+.muted { color: var(--ink-2); }
+.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; }
+a { color: var(--pine); }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { border-color: var(--ink-2); }
+.btn.primary { background: var(--berry); border-color: var(--berry); color: var(--berry-ink); }
+.btn.primary:hover { filter: brightness(1.06); }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--ink-2); padding-inline: 10px; }
+.btn.ghost:hover { color: var(--ink); background: var(--surface-2); }
+.btn.danger { color: var(--berry); }
+.btn:disabled { opacity: .5; cursor: default; }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.top .title { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.countdown { display: flex; align-items: baseline; gap: 8px; padding: 10px 16px; border: 1px dashed var(--gold); border-radius: var(--r); color: var(--ink-2); font-size: 13px; }
+.countdown b { font-family: var(--f-display); font-weight: 400; font-size: 28px; color: var(--gold); line-height: 1; }
+
+/* setup bar */
+.setup { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; box-shadow: var(--shadow); }
+.setup label { font-weight: 600; }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.stepper button { width: 38px; height: 38px; border: 0; background: transparent; font-size: 20px; line-height: 1; }
+.stepper button:hover { background: var(--surface-2); }
+.stepper output { min-width: 34px; text-align: center; font-family: var(--f-num); font-size: 17px; }
+.setup .note { font-size: 13px; color: var(--ink-2); flex: 1 1 220px; }
+.totals { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; color: var(--ink-2); }
+.totals b { color: var(--ink); font-weight: 600; }
+
+/* gift tags (home) */
+.tags { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
+.tag {
+  position: relative; text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 6px 6px var(--r) var(--r);
+  padding: 30px 18px 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow); min-width: 0;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.tag::before { content: ""; position: absolute; top: 11px; left: 50%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; border: 2px solid var(--line); background: var(--bg); }
+.tag:hover { transform: translateY(-2px); border-color: var(--berry); }
+.tag .name { font-family: var(--f-display); font-size: 22px; line-height: 1.15; overflow-wrap: anywhere; }
+.tag .meta { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--ink-2); }
+.tag .meta .num { color: var(--ink); font-size: 15px; }
+.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.thumbs span { aspect-ratio: 1; border-radius: 6px; background: var(--photo); border: 1px solid var(--line); overflow: hidden; display: grid; place-items: center; font-size: 11px; color: #8a9a93; }
+.thumbs img { width: 100%; height: 100%; object-fit: contain; }
+.bar { height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--pine); border-radius: 3px; }
+
+/* member page */
+.crumbs { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.nameField { font-family: var(--f-display); font-size: clamp(30px, 6vw, 44px); line-height: 1.1; border: 0; border-bottom: 2px dashed transparent; background: transparent; padding: 0; width: 100%; min-width: 0; }
+.nameField:hover, .nameField:focus { border-bottom-color: var(--line); outline: none; }
+.nameField { border-bottom-color: var(--line); }
+.nameField:focus { border-bottom-color: var(--gold); }
+.editrow { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.editrow .pencil { color: var(--ink-2); font-size: 18px; flex: none; }
+.titleField { font-family: var(--f-display); font-size: clamp(30px, 6vw, 46px); line-height: 1.1; border: 0; border-bottom: 2px dashed var(--line); background: transparent; padding: 0; width: 100%; min-width: 0; letter-spacing: -.01em; }
+.titleField:focus { outline: none; border-bottom-color: var(--gold); }
+.tag { cursor: pointer; }
+.tagName { font-family: var(--f-display); font-size: 22px; line-height: 1.2; border: 0; border-bottom: 1px dashed var(--line); background: transparent; padding: 0 0 2px; width: 100%; min-width: 0; }
+.tagName:focus { outline: none; border-bottom-color: var(--gold); }
+.tag .open { align-self: flex-start; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+.stat span { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); font-weight: 600; }
+.stat b { font-family: var(--f-num); font-weight: 500; font-size: 20px; font-variant-numeric: tabular-nums; }
+.stat input { font-family: var(--f-num); font-size: 20px; border: 0; border-bottom: 1px dashed var(--line); background: transparent; width: 100%; padding: 0; }
+.stat input:focus { outline: none; border-bottom-color: var(--gold); }
+.stat.over b, .stat.over input { color: var(--berry); }
+
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; box-shadow: var(--shadow); display: grid; grid-template-columns: 148px 1fr; gap: 18px; }
+.bench h2 { grid-column: 1 / -1; font-size: 20px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.drop {
+  aspect-ratio: 1; border: 2px dashed var(--line); border-radius: var(--r); background: var(--photo); display: grid; place-items: center; text-align: center;
+  padding: 10px; font-size: 12px; color: #6d7e77; position: relative; overflow: hidden; cursor: pointer;
+}
+.drop.hot { border-color: var(--berry); }
+.drop img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--photo); }
+.drop .clear { position: absolute; top: 6px; right: 6px; z-index: 2; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; font-size: 14px; line-height: 1; }
+.fields { display: grid; grid-template-columns: 1fr 120px 120px; gap: 12px; align-content: start; min-width: 0; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field.link { grid-column: 1 / -1; }
+.field.name { grid-column: 1 / 2; }
+.field label { font-size: 12px; font-weight: 600; color: var(--ink-2); letter-spacing: .04em; text-transform: uppercase; }
+.field input { border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; background: var(--bg); min-width: 0; width: 100%; }
+.field input:focus { outline: none; border-color: var(--gold); }
+.actions { grid-column: 1 / -1; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.hint { font-size: 12px; color: var(--ink-2); font-family: var(--f-body); }
+
+.toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--surface); }
+.seg button { border: 0; background: transparent; padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+.items { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; min-width: 0; box-shadow: var(--shadow); }
+.item .photo { aspect-ratio: 1; background: var(--photo); display: grid; place-items: center; position: relative; border-bottom: 1px solid var(--line); }
+.item .photo img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
+.item .photo .ph { font-family: var(--f-display); font-size: 44px; color: #b9c6c0; }
+.item .photo .ph small { display: block; font-family: var(--f-body); font-size: 12px; color: #8a9a93; text-align: center; }
+.item.bought .photo img { opacity: .55; }
+.stamp { position: absolute; top: 10px; left: 10px; background: var(--pine); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
+.item .body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.item .t { font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.item .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.item .price { font-family: var(--f-num); font-size: 18px; }
+.sizechip { align-self: flex-start; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); }
+.item .store { font-size: 12px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.item .ctrl { display: flex; gap: 4px; align-items: center; margin-top: auto; padding-top: 6px; flex-wrap: wrap; }
+.item .ctrl a { font-size: 13px; font-weight: 600; text-decoration: none; margin-right: auto; }
+.item .ctrl a:hover { text-decoration: underline; }
+.check { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+.check input { accent-color: var(--pine); width: 16px; height: 16px; }
+.confirm { display: flex; gap: 6px; align-items: center; font-size: 13px; flex-wrap: wrap; }
+
+.empty { border: 2px dashed var(--line); border-radius: var(--r); padding: 36px 20px; text-align: center; color: var(--ink-2); display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.empty h3 { color: var(--ink); font-size: 22px; }
+.banner { border: 1px solid var(--gold); background: var(--surface); border-radius: var(--r); padding: 12px 16px; font-size: 14px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; z-index: 20; max-width: calc(100% - 32px); }
+.danger-zone { display: flex; justify-content: flex-end; }
+
+@media (max-width: 640px) {
+  .bench { grid-template-columns: 1fr; }
+  .drop { aspect-ratio: auto; height: 150px; }
+  .fields { grid-template-columns: 1fr 1fr; }
+  .field.name { grid-column: 1 / -1; }
+  .items { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .item .photo img { padding: 6px; }
+}
+@media (prefers-reduced-motion: reduce) { .tag { transition: none; } .tag:hover { transform: none; } }
+
+/* ---- Festive layer ---- */
+body { background: var(--bg); background-image: radial-gradient(rgba(200,16,46,.05) 1.5px, transparent 1.6px); background-size: 22px 22px; }
+#snow { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.wrap { position: relative; z-index: 1; }
+h1 { font-family: var(--f-display); font-weight: 700; letter-spacing: .01em; }
+h2 { font-family: var(--f-round); font-weight: 900; }
+.num, .stat b, .item .price, .stepper output { font-weight: 800; font-variant-numeric: tabular-nums; }
+.btn { font-family: var(--f-round); font-weight: 800; }
+.btn.primary { box-shadow: 0 3px 0 #8e0b20; }
+.btn.primary:active { transform: translateY(2px); box-shadow: 0 1px 0 #8e0b20; }
+.eyebrow { color: var(--berry); }
+.hero { position: relative; overflow: hidden; background: radial-gradient(120% 140% at 15% 0%, #1f5c3d 0%, var(--forest) 60%, #0b2619 100%); color: #fff; border-radius: 22px; padding: 46px clamp(18px, 4vw, 36px) 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); border-bottom: 10px solid transparent; border-image: var(--stripe) 10; }
+.hero > * { position: relative; z-index: 1; }
+.hero .eyebrow { color: #ffd76a; }
+.hero h1, .hero .titleField, .hero .nameField { color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.titleField, .nameField { font-family: var(--f-display); font-weight: 700; font-size: clamp(36px, 7vw, 58px); }
+.hero .titleField, .hero .nameField { border-bottom-color: rgba(255,255,255,.35); }
+.hero .titleField:focus, .hero .nameField:focus { border-bottom-color: #ffd76a; }
+.hero .pencil { color: rgba(255,255,255,.75); }
+.hero .countdown { border: 2px solid #ffd76a; color: #fff; background: rgba(255,255,255,.08); border-radius: 999px; padding: 10px 20px; }
+.hero .countdown b { color: #ffd76a; font-family: var(--f-display); font-size: 40px; }
+.hero .btn.ghost { color: #fff; }
+.hero .btn.ghost:hover { background: rgba(255,255,255,.14); }
+.lights { position: absolute; top: 0; left: 0; right: 0; height: 34px; z-index: 1; pointer-events: none; }
+.lights svg { width: 100%; height: 100%; display: block; }
+.bulb { animation: twinkle 2.4s ease-in-out infinite; }
+.bulb:nth-of-type(3n) { animation-delay: .8s; } .bulb:nth-of-type(3n+1) { animation-delay: 1.6s; }
+@keyframes twinkle { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+.deco { position: absolute; z-index: 0; pointer-events: none; }
+.hero h1 { font-size: clamp(40px, 8vw, 58px); }
+@media (max-width: 640px) { .deco:not(.holly) { display: none; } .deco.holly { right: 14px; bottom: 8px; } }
+.tagName, .tag .name { font-family: var(--f-display); font-weight: 700; font-size: 28px; }
+.tag { border-radius: 8px 8px 18px 18px; border: 1px solid var(--line); background: var(--surface); }
+.tag::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 8px; background: var(--stripe); border-radius: 8px 8px 0 0; }
+.tag::before { top: 16px; border-color: var(--gold); }
+.tag:nth-child(3n+2)::after { background: repeating-linear-gradient(-45deg, #1e6b45 0 10px, #ffffff 10px 20px); }
+.tag:nth-child(3n+3)::after { background: repeating-linear-gradient(-45deg, #e0a526 0 10px, #ffffff 10px 20px); }
+.tag:hover { border-color: var(--berry); transform: translateY(-3px) rotate(-.4deg); }
+.bar { height: 8px; }
+.bar i { background: repeating-linear-gradient(-45deg, #1e6b45 0 6px, #2f8a5c 6px 12px); }
+.stamp { background: var(--berry); color: #fff; transform: rotate(-6deg); box-shadow: 0 2px 0 rgba(0,0,0,.15); }
+.item .by { color: var(--pine); }
+.item .ctrl a, a { color: var(--pine); }
+.item { border-radius: 18px; }
+.stat { border-radius: 16px; }
+.stat b { color: var(--berry); font-size: 26px; }
+.seg button[aria-pressed="true"] { background: var(--pine); color: #fff; }
+.pill.edit { color: var(--berry); border-color: var(--berry); }
+.wrap .share { border: 2px dashed var(--pine); }
+.drop.hot, .field input:focus, .stat input:focus, .tagName:focus { border-color: var(--pine); }
+:focus-visible { outline-color: var(--gold); }
+.empty h3 { font-family: var(--f-display); font-weight: 700; font-size: 30px; }
+.item .photo .ph { font-family: var(--f-display); color: #dccfbe; }
+.toast { background: var(--pine); color: #fff; }
+@media (prefers-reduced-motion: reduce) { .bulb { animation: none; } #snow { display: none; } .tag:hover { transform: none; } }
+</style>
+<style>
+.modebar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; font-size: 13px; color: var(--ink-2); }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; border: 1px solid var(--line); background: var(--surface); }
+.pill.edit { color: var(--berry); border-color: var(--berry); }
+.share { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; background: var(--surface); border: 1px dashed var(--gold); border-radius: var(--r); padding: 14px 16px; }
+.share code { font-family: var(--f-num); font-size: 13px; background: var(--surface-2); padding: 6px 10px; border-radius: 6px; overflow-wrap: anywhere; min-width: 0; flex: 1 1 240px; }
+.share .lbl { font-weight: 600; }
+.share .sub { flex-basis: 100%; font-size: 12px; color: var(--ink-2); }
+.by { font-size: 12px; color: var(--pine); font-weight: 600; }
+.buyform { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; width: 100%; }
+.buyform input { flex: 1 1 110px; min-width: 0; border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px; background: var(--bg); font-size: 13px; }
+.buyform input:focus { outline: none; border-color: var(--gold); }
+.status { font-size: 12px; color: var(--ink-2); min-height: 18px; }
+.status.warn { color: var(--berry); }
+.btn.small { padding: 5px 12px; font-size: 13px; }
+.drop.busy::after { content: "Finding photo…"; position: absolute; inset: 0; display: grid; place-items: center; background: rgba(255,255,255,.75); color: #33453f; font-size: 13px; font-weight: 600; z-index: 3; }
+.keyform { display: flex; gap: 8px; flex-wrap: wrap; }
+.keyform input { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); min-width: 0; flex: 1 1 200px; }
+footer { font-size: 12px; color: var(--ink-2); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+footer button { background: none; border: 0; padding: 0; color: var(--ink-2); text-decoration: underline; font-size: 12px; }
+</style>
+
+</head>
+<body>
+<canvas id="snow" aria-hidden="true"></canvas>
+<div class="wrap" id="app"><div class="empty"><h3>Loading the lists…</h3></div></div>
+<div class="toast" id="toast" hidden></div>
+<input type="file" id="filePick" accept="image/*" hidden>
+<script>
+(function () {
+  const app = document.getElementById('app');
+  const toastEl = document.getElementById('toast');
+  const filePick = document.getElementById('filePick');
+  const DEFAULT_TITLE = 'Family Christmas Lists';
+  const CONFETTI = `<div class="lights" aria-hidden="true"><svg viewBox="0 0 1000 34" preserveAspectRatio="none"><path d="M0 6 Q 50 22 100 6 T 200 6 T 300 6 T 400 6 T 500 6 T 600 6 T 700 6 T 800 6 T 900 6 T 1000 6" fill="none" stroke="#0b2619" stroke-width="2"/></svg><span class="bulb" style="position:absolute;top:10px;left:calc(2.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ff4d5e;box-shadow:0 0 10px #ff4d5e"></span><span class="bulb" style="position:absolute;top:16px;left:calc(7.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ffd76a;box-shadow:0 0 10px #ffd76a"></span><span class="bulb" style="position:absolute;top:10px;left:calc(12.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#5fd38d;box-shadow:0 0 10px #5fd38d"></span><span class="bulb" style="position:absolute;top:16px;left:calc(17.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#6ec6ff;box-shadow:0 0 10px #6ec6ff"></span><span class="bulb" style="position:absolute;top:10px;left:calc(22.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ff9f43;box-shadow:0 0 10px #ff9f43"></span><span class="bulb" style="position:absolute;top:16px;left:calc(27.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ff4d5e;box-shadow:0 0 10px #ff4d5e"></span><span class="bulb" style="position:absolute;top:10px;left:calc(32.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ffd76a;box-shadow:0 0 10px #ffd76a"></span><span class="bulb" style="position:absolute;top:16px;left:calc(37.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#5fd38d;box-shadow:0 0 10px #5fd38d"></span><span class="bulb" style="position:absolute;top:10px;left:calc(42.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#6ec6ff;box-shadow:0 0 10px #6ec6ff"></span><span class="bulb" style="position:absolute;top:16px;left:calc(47.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ff9f43;box-shadow:0 0 10px #ff9f43"></span><span class="bulb" style="position:absolute;top:10px;left:calc(52.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ff4d5e;box-shadow:0 0 10px #ff4d5e"></span><span class="bulb" style="position:absolute;top:16px;left:calc(57.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ffd76a;box-shadow:0 0 10px #ffd76a"></span><span class="bulb" style="position:absolute;top:10px;left:calc(62.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#5fd38d;box-shadow:0 0 10px #5fd38d"></span><span class="bulb" style="position:absolute;top:16px;left:calc(67.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#6ec6ff;box-shadow:0 0 10px #6ec6ff"></span><span class="bulb" style="position:absolute;top:10px;left:calc(72.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ff9f43;box-shadow:0 0 10px #ff9f43"></span><span class="bulb" style="position:absolute;top:16px;left:calc(77.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ff4d5e;box-shadow:0 0 10px #ff4d5e"></span><span class="bulb" style="position:absolute;top:10px;left:calc(82.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ffd76a;box-shadow:0 0 10px #ffd76a"></span><span class="bulb" style="position:absolute;top:16px;left:calc(87.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#5fd38d;box-shadow:0 0 10px #5fd38d"></span><span class="bulb" style="position:absolute;top:10px;left:calc(92.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#6ec6ff;box-shadow:0 0 10px #6ec6ff"></span><span class="bulb" style="position:absolute;top:16px;left:calc(97.5% - 5px);width:10px;height:15px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#ff9f43;box-shadow:0 0 10px #ff9f43"></span></div><svg class="deco holly" style="right:38%;bottom:6px;width:52px" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 30c-6-10-20-12-26-6 8 2 10 8 8 14 6-4 14-4 18-8z" fill="#2f8a5c"/><path d="M32 30c6-10 20-12 26-6-8 2-10 8-8 14-6-4-14-4-18-8z" fill="#1e6b45"/><circle cx="28" cy="32" r="5" fill="#e0233f"/><circle cx="36" cy="33" r="5" fill="#c8102e"/><circle cx="32" cy="27" r="5" fill="#ff3b55"/></svg><svg class="deco" style="right:30%;top:44px;width:24px;opacity:.85" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l3 7.5 8 .6-6.1 5.2 1.9 7.9L12 18l-6.8 4.2 1.9-7.9L1 9.1l8-.6z" fill="#ffd76a"/></svg><svg class="deco" style="left:62%;top:52px;width:20px;opacity:.55" viewBox="0 0 24 24" aria-hidden="true"><g stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7"/><path d="M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5"/></g></svg>`;
+
+  const S = {
+    ready: false, failed: '',
+    key: '', canEdit: false, editSetUp: true,
+    lists: new Map(), items: new Map(), settings: {},
+    homeCount: null, form: null, filter: 'all',
+    confirmDelete: null, buying: null, busy: false, lastJson: '',
+    showKeyForm: false, filling: false,
+  };
+
+  /* ---------- storage of the owner key (this browser only) ---------- */
+  function loadKey() { try { return localStorage.getItem('xmasEditKey') || ''; } catch { return ''; } }
+  function saveKey(k) { try { k ? localStorage.setItem('xmasEditKey', k) : localStorage.removeItem('xmasEditKey'); } catch {} }
+  function loadName() { try { return localStorage.getItem('xmasBuyerName') || ''; } catch { return ''; } }
+  function saveName(n) { try { localStorage.setItem('xmasBuyerName', n); } catch {} }
+
+  /* ---------- helpers ---------- */
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const money = c => (c == null || isNaN(c)) ? '—' : '$' + (c / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const parseMoney = v => { const n = parseFloat(String(v || '').replace(/[^0-9.]/g, '')); return isNaN(n) ? null : Math.round(n * 100); };
+  function host(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } }
+  function safeUrl(u) { try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : ''; } catch { return ''; } }
+  function normalizeUrl(u) { u = (u || '').trim(); if (u && !/^https?:\/\//i.test(u) && /\.[a-z]{2,}/i.test(u)) u = 'https://' + u; return u; }
+  const imgSrc = v => (/^\/api\/img\/[a-z0-9]+$/i.test(v || '') ? v : safeUrl(v));
+  function titleFromUrl(u) {
+    try {
+      const x = new URL(u);
+      const segs = x.pathname.split('/').map(s => decodeURIComponent(s)).filter(s => /[a-z]/i.test(s) && /[-_]/.test(s) && s.length > 6);
+      if (!segs.length) return '';
+      const best = segs.sort((a, b) => b.length - a.length)[0].replace(/\.(html?|aspx?|php)$/i, '');
+      const words = best.split(/[-_]+/).filter(w => w && !/^\d{5,}$/.test(w) && !/^(dp|p|ip|prd|product)$/i.test(w));
+      const t = words.map(w => w.length > 3 || /^[A-Z0-9]+$/.test(w) ? w[0].toUpperCase() + w.slice(1) : w.toLowerCase()).join(' ');
+      return t.length > 80 ? t.slice(0, 78).trim() + '…' : t;
+    } catch { return ''; }
+  }
+  function toast(msg) { toastEl.textContent = msg; toastEl.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => toastEl.hidden = true, 2800); }
+  function daysToChristmas() {
+    const now = new Date(); const y = now.getFullYear();
+    let xmas = new Date(y, 11, 25); if (now > new Date(y, 11, 25, 23, 59)) xmas = new Date(y + 1, 11, 25);
+    return Math.max(0, Math.ceil((xmas - new Date(y, now.getMonth(), now.getDate())) / 864e5));
+  }
+  const sortedLists = () => [...S.lists.values()].sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || (a.createdAt ?? 0) - (b.createdAt ?? 0));
+  const itemsFor = id => [...S.items.values()].filter(i => i.listId === id).sort((a, b) => (a.createdAt ?? 0) - (b.createdAt ?? 0));
+  const counts = its => ({ n: its.length, nBought: its.filter(i => i.purchased).length });
+  function route() { const m = /^#m-([a-z0-9]+)$/i.exec(location.hash); return m ? m[1] : null; }
+  const title = () => (S.settings && S.settings.title) || DEFAULT_TITLE;
+
+  /* ---------- API ---------- */
+  async function api(path, opts = {}) {
+    const headers = Object.assign({}, opts.headers || {});
+    if (S.key) headers['x-edit-key'] = S.key;
+    let body = opts.body;
+    if (body && !(body instanceof Blob)) { headers['content-type'] = 'application/json'; body = JSON.stringify(body); }
+    const res = await fetch('/api/' + path, { method: opts.method || 'GET', headers, body });
+    let data = {}; try { data = await res.json(); } catch {}
+    if (!res.ok) { const e = new Error(data.error || 'Something went wrong. Try again.'); e.status = res.status; throw e; }
+    return data;
+  }
+  async function act(p, okMsg) {
+    try { const r = await p; if (okMsg) toast(okMsg); await refresh(true); return r || true; }
+    catch (e) { toast(e.message || 'That didn’t save. Try again.'); await refresh(true); return false; }
+  }
+  async function refresh(force) {
+    try {
+      const d = await api('state');
+      const j = JSON.stringify([d.lists, d.items, d.settings, d.canEdit]);
+      S.canEdit = !!d.canEdit; S.editSetUp = d.editSetUp !== false;
+      if (S.key && !d.canEdit) { saveKey(''); S.key = ''; toast('That owner key didn’t work, so you’re in view mode.'); }
+      S.lists = new Map(d.lists.map(l => [l.id, l]));
+      S.items = new Map(d.items.map(i => [i.id, i]));
+      S.settings = d.settings || {};
+      document.title = title();
+      const changed = j !== S.lastJson; S.lastJson = j;
+      if (!S.ready) { S.ready = true; render(); return; }
+      if (force) { render(); return; }
+      const a = document.activeElement;
+      const typing = a && app.contains(a) && /^(INPUT|TEXTAREA)$/.test(a.tagName);
+      if (changed && !typing && !S.busy) render();
+    } catch (e) {
+      if (!S.ready) { S.failed = 'The lists didn’t load. Check your connection and reload the page.'; render(); }
+    }
+  }
+
+  /* ---------- rendering ---------- */
+  function render() {
+    if (!S.ready) {
+      app.innerHTML = S.failed ? `<div class="empty"><h3>Can’t load the lists</h3><p>${esc(S.failed)}</p></div>` : `<div class="empty"><h3>Loading the lists…</h3></div>`;
+      return;
+    }
+    const id = route();
+    if (id && S.lists.has(id)) renderMember(id); else renderHome();
+  }
+
+  function header() {
+    const d = daysToChristmas();
+    const now = new Date();
+    const year = now.getMonth() === 11 && now.getDate() > 25 ? now.getFullYear() + 1 : now.getFullYear();
+    const h = S.canEdit
+      ? `<div class="editrow"><input class="titleField" id="titleField" value="${esc(title())}" aria-label="Page title" maxlength="60" title="Click to rename"><span class="pencil" aria-hidden="true">✎</span></div>`
+      : `<h1>${esc(title())}</h1>`;
+    return `<section class="hero">${CONFETTI}<div class="top"><div class="title" style="flex:1 1 320px"><span class="eyebrow">Christmas ${year}</span>${h}</div>
+      <div class="countdown"><b>${d}</b>${d === 1 ? 'day' : 'days'} until Christmas</div></div></section>`;
+  }
+
+  function footer() {
+    if (S.canEdit) return `<footer><span><span class="pill edit">Owner mode</span> You can add and edit gifts on this device.</span><button id="leaveEdit">Switch to family view</button></footer>`;
+    return `<footer><span>Tap “I bought this” on a gift so nobody buys it twice.</span>${S.showKeyForm
+      ? `<form class="keyform" id="keyForm"><input id="keyInput" type="password" placeholder="Owner key" aria-label="Owner key" autocomplete="off"><button class="btn small" type="submit">Unlock editing</button></form>`
+      : `<button id="ownerLogin">List owner? Unlock editing</button>`}</footer>`;
+  }
+
+  function wireCommon() {
+    const tf = app.querySelector('#titleField');
+    if (tf) {
+      tf.onkeydown = e => { if (e.key === 'Enter') tf.blur(); };
+      tf.onchange = () => { const v = tf.value.trim(); if (!v) { tf.value = title(); return; } act(api('settings', { method: 'POST', body: { title: v } }), 'Title saved'); };
+    }
+    const le = app.querySelector('#leaveEdit'); if (le) le.onclick = () => { saveKey(''); S.key = ''; S.canEdit = false; render(); refresh(true); };
+    const ol = app.querySelector('#ownerLogin'); if (ol) ol.onclick = () => { S.showKeyForm = true; render(); app.querySelector('#keyInput')?.focus(); };
+    const kf = app.querySelector('#keyForm'); if (kf) kf.onsubmit = async e => {
+      e.preventDefault(); const k = app.querySelector('#keyInput').value.trim(); if (!k) return;
+      S.key = k; const r = await api('auth', { method: 'POST' }).catch(() => ({}));
+      if (r.ok) { saveKey(k); S.showKeyForm = false; toast('Editing unlocked on this device'); refresh(true); }
+      else { S.key = ''; toast('That key isn’t right.'); }
+    };
+  }
+
+  function renderHome() {
+    const lists = sortedLists();
+    if (S.homeCount == null) S.homeCount = lists.length || 4;
+    const n = S.homeCount;
+    let btn = '';
+    if (n > lists.length) btn = `<button class="btn primary" id="createLists">${lists.length ? `Add ${n - lists.length} more ${n - lists.length === 1 ? 'list' : 'lists'}` : `Create ${n} ${n === 1 ? 'list' : 'lists'}`}</button>`;
+    else btn = `<button class="btn" disabled>${lists.length} ${lists.length === 1 ? 'list' : 'lists'} ready</button>`;
+    const note = n < lists.length ? 'To go below your current number, open a person’s list and delete it.'
+      : lists.length ? 'Click a name on a tag to rename it, or open a list to add gifts.' : 'Pick how many people you’re shopping for. You can rename each list after.';
+
+    const tags = lists.map(l => {
+      const its = itemsFor(l.id), c = counts(its);
+      const thumbs = its.filter(i => i.image).slice(0, 4);
+      const slots = [];
+      for (let k = 0; k < 4; k++) slots.push(thumbs[k] ? `<span><img src="${esc(imgSrc(thumbs[k].image))}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>` : `<span></span>`);
+      const pct = c.n ? Math.round(c.nBought / c.n * 100) : 0;
+      return `<div class="tag" data-open="${esc(l.id)}">
+        ${S.canEdit ? `<input class="tagName" data-rename="${esc(l.id)}" value="${esc(l.name || '')}" placeholder="Name" aria-label="Name for this list" maxlength="60">` : `<div class="name">${esc(l.name || 'Unnamed')}</div>`}
+        <div class="thumbs">${slots.join('')}</div>
+        <div class="meta"><span>${c.n} ${c.n === 1 ? 'gift' : 'gifts'} on the list</span></div>
+        <div class="bar" title="${c.nBought} of ${c.n} bought"><i style="width:${pct}%"></i></div>
+        <div class="meta"><span>${c.nBought} of ${c.n} bought</span></div>
+        <button class="btn open" data-go="${esc(l.id)}">Open list →</button>
+      </div>`;
+    }).join('');
+
+    const familyLink = location.origin + location.pathname;
+    app.innerHTML = `${header()}
+      ${S.canEdit ? `<section class="setup" aria-label="Family members">
+          <label for="countOut">Family members</label>
+          <div class="stepper"><button id="dec" aria-label="Fewer">−</button><output id="countOut" class="num">${n}</output><button id="inc" aria-label="More">+</button></div>
+          ${btn}<span class="note">${note}</span>
+        </section>
+        <section class="share"><span class="lbl">Family link</span><code id="famLink">${esc(familyLink)}</code><button class="btn small" id="copyLink">Copy link</button>
+          <span class="sub">Send this link to the grandparents. They can see every list and mark gifts as bought. They can’t change the lists.</span></section>` : ''}
+      ${!S.editSetUp && !S.canEdit ? `<div class="banner">Setup isn’t finished: add an EDIT_KEY environment variable in Netlify, then redeploy.</div>` : ''}
+      ${lists.length ? `<div class="tags">${tags}</div>`
+        : `<div class="empty"><h3>No lists yet</h3><p>${S.canEdit ? 'Set the number of family members above and press Create. Each person gets their own page for gift links, photos and prices.' : 'Check back soon. The lists haven’t been started yet.'}</p></div>`}
+      ${footer()}`;
+
+    const dec = app.querySelector('#dec'), inc = app.querySelector('#inc');
+    if (dec) dec.onclick = () => { S.homeCount = Math.max(1, n - 1); render(); };
+    if (inc) inc.onclick = () => { S.homeCount = Math.min(30, n + 1); render(); };
+    const c = app.querySelector('#createLists');
+    if (c) c.onclick = async () => { c.disabled = true; await act(api('lists', { method: 'POST', body: { count: n } }), 'Lists created'); };
+    const cp = app.querySelector('#copyLink');
+    if (cp) cp.onclick = async () => {
+      try { await navigator.clipboard.writeText(familyLink); toast('Link copied'); }
+      catch { const r = document.createRange(); r.selectNodeContents(app.querySelector('#famLink')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast('Press Ctrl+C to copy'); }
+    };
+    app.querySelectorAll('[data-open]').forEach(b => b.onclick = e => { if (e.target.closest('input')) return; location.hash = 'm-' + b.dataset.open; });
+    app.querySelectorAll('[data-rename]').forEach(inp => {
+      inp.onkeydown = e => { if (e.key === 'Enter') inp.blur(); };
+      inp.onchange = () => { const v = inp.value.trim(); const lid = inp.dataset.rename; if (v && v !== S.lists.get(lid)?.name) act(api('lists/' + lid, { method: 'PATCH', body: { name: v } }), 'Name saved'); else if (!v) inp.value = S.lists.get(lid)?.name || ''; };
+    });
+    wireCommon();
+  }
+
+  function emptyForm(listId) { return { listId, editingId: null, url: '', title: '', price: '', size: '', image: '', blob: null, preview: null, status: '', warn: false, looking: false }; }
+
+  function renderMember(id) {
+    const l = S.lists.get(id);
+    if (!S.form || S.form.listId !== id) { if (S.form?.preview) URL.revokeObjectURL(S.form.preview); S.form = emptyForm(id); }
+    const f = S.form;
+    const all = itemsFor(id), c = counts(all);
+    const shown = all.filter(i => S.filter === 'all' || (S.filter === 'todo' ? !i.purchased : i.purchased));
+    const ed = S.canEdit;
+    const missing = all.filter(i => !i.image && i.url).length;
+
+    const photo = f.preview || (f.image ? imgSrc(f.image) : '');
+    const dropInner = photo
+      ? `<img src="${esc(photo)}" alt="Item photo" referrerpolicy="no-referrer"><button type="button" class="clear" id="clearImg" aria-label="Remove photo">×</button>`
+      : `<span>Paste a link and the photo fills in. Or paste, drop or <u>choose</u> a photo.</span>`;
+
+    const cards = shown.map(i => {
+      const u = safeUrl(i.url), h = host(i.url);
+      const confirming = S.confirmDelete === i.id;
+      const buying = S.buying === i.id;
+      let ctrl;
+      if (confirming) ctrl = `<span class="confirm">Delete this gift? <button class="btn danger small" data-del-yes="${i.id}">Delete</button><button class="btn ghost small" data-del-no>Keep</button></span>`;
+      else if (buying) ctrl = `<form class="buyform" data-buyform="${i.id}"><input placeholder="Your name (optional)" aria-label="Your name" value="${esc(loadName())}" maxlength="40"><button class="btn primary small" type="submit">Mark bought</button><button class="btn ghost small" type="button" data-buy-cancel>Cancel</button></form>`;
+      else ctrl = `${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">View item ↗</a>` : '<span style="margin-right:auto"></span>'}
+        ${i.purchased ? `<button class="btn ghost small" data-unbuy="${i.id}">Undo bought</button>` : `<button class="btn small" data-buy="${i.id}">I bought this</button>`}
+        ${ed ? `<button class="btn ghost small" data-edit="${i.id}">Edit</button><button class="btn ghost small" data-del="${i.id}" aria-label="Delete">✕</button>` : ''}`;
+      return `<article class="item${i.purchased ? ' bought' : ''}">
+        <div class="photo">${i.image ? `<img src="${esc(imgSrc(i.image))}" alt="${esc(i.title)}" loading="lazy" referrerpolicy="no-referrer">` : `<div class="ph">${esc((h || i.title || '?')[0].toUpperCase())}<small>No photo</small></div>`}
+          ${i.purchased ? `<span class="stamp">Bought</span>` : ''}</div>
+        <div class="body">
+          <div class="t">${esc(i.title || h || 'Untitled gift')}</div>
+          ${i.size ? `<div class="sizechip">Size ${esc(i.size)}</div>` : ''}
+          <div class="row"><span class="price">${money(i.price)}</span><span class="store">${esc(h)}</span></div>
+          ${i.purchased && i.purchasedBy ? `<div class="by">Bought by ${esc(i.purchasedBy)}</div>` : ''}
+          <div class="ctrl">${ctrl}</div>
+        </div></article>`;
+    }).join('');
+
+    app.innerHTML = `
+      <section class="hero">${CONFETTI}<div class="crumbs"><button class="btn ghost" id="back">← All lists</button><span class="eyebrow">${daysToChristmas()} days until Christmas</span></div>
+      <div>${ed ? `<div class="editrow"><input class="nameField" id="nameField" value="${esc(l.name)}" aria-label="Name" maxlength="60" title="Click to rename"><span class="pencil" aria-hidden="true">✎</span></div>` : `<h1>${esc(l.name)}</h1>`}</div></section>
+      <div class="stats">
+        <div class="stat"><span>Gifts</span><b>${c.n}</b></div>
+        <div class="stat"><span>Bought</span><b>${c.nBought}</b></div>
+        <div class="stat"><span>Still to buy</span><b>${c.n - c.nBought}</b></div>
+      </div>
+
+      ${ed ? `<form class="bench" id="itemForm" autocomplete="off">
+        <h2>${f.editingId ? 'Edit gift' : 'Add a gift'}<span class="hint">Paste a store link. The photo, name and price fill in when the store allows it.</span></h2>
+        <div class="drop${f.looking ? ' busy' : ''}" id="drop" role="button" tabindex="0" aria-label="Add product photo">${dropInner}</div>
+        <div class="fields">
+          <div class="field link"><label for="fUrl">Link to item</label><input id="fUrl" type="url" placeholder="https://www.example.com/product…" value="${esc(f.url)}"></div>
+          <div class="field name"><label for="fTitle">Item name</label><input id="fTitle" placeholder="What is it?" value="${esc(f.title)}" maxlength="140"></div>
+          <div class="field"><label for="fSize">Size</label><input id="fSize" placeholder="e.g. 4T, 9, XL" value="${esc(f.size || '')}" maxlength="30"></div>
+          <div class="field"><label for="fPrice">Price</label><input id="fPrice" inputmode="decimal" placeholder="0.00" value="${esc(f.price)}"></div>
+          <div class="actions">
+            <button class="btn primary" type="submit" id="saveBtn">${f.editingId ? 'Save changes' : 'Add to list'}</button>
+            ${f.editingId || f.url || f.title || f.price || photo ? `<button class="btn ghost" type="button" id="cancelForm">${f.editingId ? 'Cancel' : 'Clear'}</button>` : ''}
+            <span class="status${f.warn ? ' warn' : ''}" id="status">${esc(f.status)}</span>
+          </div>
+        </div>
+      </form>` : ''}
+
+      <div class="toolbar"><h2>${esc(l.name)}’s list</h2>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          ${ed && missing ? `<button class="btn small" id="fillPhotos" ${S.filling ? 'disabled' : ''}>${S.filling ? 'Finding photos…' : `Find ${missing} missing ${missing === 1 ? 'photo' : 'photos'}`}</button>` : ''}
+          <div class="seg" role="group" aria-label="Filter">
+            ${['all', 'todo', 'done'].map(k => `<button data-filter="${k}" aria-pressed="${S.filter === k}">${{ all: 'All', todo: 'To buy', done: 'Bought' }[k]} ${k === 'all' ? c.n : k === 'todo' ? c.n - c.nBought : c.nBought}</button>`).join('')}
+          </div></div></div>
+      ${cards ? `<div class="items">${cards}</div>` : `<div class="empty"><h3>${c.n ? 'Nothing here' : 'No gifts yet'}</h3><p>${c.n ? 'Try a different filter.' : ed ? 'Paste a store link above and it will show up here.' : 'Nothing has been added to this list yet.'}</p></div>`}
+
+      ${ed ? `<div class="danger-zone">${S.confirmDelete === 'list'
+        ? `<span class="confirm">Delete ${esc(l.name)}’s list and all ${c.n} gifts? <button class="btn danger" id="delListYes">Delete list</button><button class="btn ghost" id="delListNo">Keep</button></span>`
+        : `<button class="btn ghost danger" id="delList">Delete this list</button>`}</div>` : ''}
+      ${footer()}`;
+
+    wireMember(id);
+    wireCommon();
+  }
+
+  function setStatus(msg, warn) {
+    S.form.status = msg; S.form.warn = !!warn;
+    const el = app.querySelector('#status'); if (el) { el.textContent = msg; el.className = 'status' + (warn ? ' warn' : ''); }
+  }
+
+  async function lookUp(url) {
+    const f = S.form; if (!safeUrl(url)) return;
+    f.looking = true; setStatus('Looking up the item…'); app.querySelector('#drop')?.classList.add('busy');
+    let r = {};
+    try { r = await api('preview', { method: 'POST', body: { url } }); } catch {}
+    if (S.form !== f || f.url !== url) return; // user moved on
+    f.looking = false;
+    const titleEl = app.querySelector('#fTitle'), priceEl = app.querySelector('#fPrice');
+    if (titleEl && titleEl.value !== f.title) f.title = titleEl.value;
+    if (priceEl && priceEl.value !== f.price) f.price = priceEl.value;
+    if (r.title && (!f.title || f.title === titleFromUrl(url))) f.title = r.title;
+    if (r.price && !f.price) f.price = (r.price / 100).toFixed(2);
+    if (r.image && !f.blob) f.image = r.image;
+    if (r.blocked || (!r.image && !r.title)) { f.status = 'This store didn’t share its details. Copy the product photo and paste it here.'; f.warn = true; }
+    else if (!r.image) { f.status = 'Found the item, but no photo. You can paste one.'; f.warn = true; }
+    else { f.status = r.price ? 'Photo, name and price filled in. Check them, then add.' : 'Photo and name filled in. Add the price.'; f.warn = false; }
+    render();
+  }
+
+  function wireMember(id) {
+    const $ = s => app.querySelector(s);
+    $('#back').onclick = () => { location.hash = ''; };
+    const nf = $('#nameField');
+    if (nf) { nf.onchange = () => { const v = nf.value.trim(); if (v && v !== S.lists.get(id).name) act(api('lists/' + id, { method: 'PATCH', body: { name: v } }), 'Name saved'); }; nf.onkeydown = e => { if (e.key === 'Enter') nf.blur(); }; }
+
+    app.querySelectorAll('[data-filter]').forEach(b => b.onclick = () => { S.filter = b.dataset.filter; render(); });
+    app.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => { S.buying = b.dataset.buy; render(); app.querySelector('[data-buyform] input')?.focus(); });
+    app.querySelectorAll('[data-buy-cancel]').forEach(b => b.onclick = () => { S.buying = null; render(); });
+    app.querySelectorAll('[data-buyform]').forEach(fm => fm.onsubmit = async e => {
+      e.preventDefault(); const name = fm.querySelector('input').value.trim(); if (name) saveName(name);
+      const iid = fm.dataset.buyform; S.buying = null;
+      await act(api('items/' + iid + '/bought', { method: 'POST', body: { purchased: true, by: name } }), 'Marked as bought');
+    });
+    app.querySelectorAll('[data-unbuy]').forEach(b => b.onclick = () => act(api('items/' + b.dataset.unbuy + '/bought', { method: 'POST', body: { purchased: false } }), 'Marked as not bought'));
+    app.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => {
+      const i = S.items.get(b.dataset.edit); if (!i) return;
+      if (S.form?.preview) URL.revokeObjectURL(S.form.preview);
+      S.form = Object.assign(emptyForm(id), { editingId: i.id, url: i.url || '', title: i.title || '', price: i.price != null ? (i.price / 100).toFixed(2) : '', size: i.size || '', image: i.image || '' });
+      render(); app.querySelector('#itemForm')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    app.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { S.confirmDelete = b.dataset.del; render(); });
+    app.querySelectorAll('[data-del-no]').forEach(b => b.onclick = () => { S.confirmDelete = null; render(); });
+    app.querySelectorAll('[data-del-yes]').forEach(b => b.onclick = async () => {
+      const iid = b.dataset.delYes; S.confirmDelete = null;
+      if (S.form?.editingId === iid) S.form = emptyForm(id);
+      await act(api('items/' + iid, { method: 'DELETE' }), 'Gift deleted');
+    });
+    const dl = $('#delList'); if (dl) dl.onclick = () => { S.confirmDelete = 'list'; render(); };
+    const dn = $('#delListNo'); if (dn) dn.onclick = () => { S.confirmDelete = null; render(); };
+    const dy = $('#delListYes'); if (dy) dy.onclick = async () => {
+      S.confirmDelete = null;
+      if (await act(api('lists/' + id, { method: 'DELETE' }), 'List deleted')) { S.homeCount = null; location.hash = ''; }
+    };
+    const fp = $('#fillPhotos'); if (fp) fp.onclick = () => fillMissing(id);
+
+    const form = $('#itemForm'); if (!form) return;
+    const fUrl = $('#fUrl'), fTitle = $('#fTitle'), fPrice = $('#fPrice');
+    const fSize = $('#fSize');
+    const sync = () => { S.form.url = fUrl.value; S.form.title = fTitle.value; S.form.price = fPrice.value; S.form.size = fSize.value; };
+    [fUrl, fTitle, fSize, fPrice].forEach(el => el.addEventListener('input', sync));
+    fUrl.addEventListener('change', () => {
+      fUrl.value = normalizeUrl(fUrl.value); sync();
+      if (!fTitle.value.trim()) { const t = titleFromUrl(fUrl.value); if (t) { fTitle.value = t; sync(); } }
+      if (safeUrl(fUrl.value)) lookUp(fUrl.value);
+    });
+    const drop = $('#drop');
+    const pick = () => filePick.click();
+    drop.onclick = e => { if (e.target.closest('#clearImg')) return; pick(); };
+    drop.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } };
+    drop.ondragover = e => { e.preventDefault(); drop.classList.add('hot'); };
+    drop.ondragleave = () => drop.classList.remove('hot');
+    drop.ondrop = e => { e.preventDefault(); drop.classList.remove('hot'); const file = [...(e.dataTransfer?.files || [])].find(x => x.type.startsWith('image/')); if (file) setImage(file); else toast('Drop an image file, or copy the photo and paste it.'); };
+    const ci = $('#clearImg'); if (ci) ci.onclick = e => { e.stopPropagation(); if (S.form.preview) URL.revokeObjectURL(S.form.preview); Object.assign(S.form, { blob: null, preview: null, image: '' }); render(); };
+    const cf = $('#cancelForm'); if (cf) cf.onclick = () => { if (S.form.preview) URL.revokeObjectURL(S.form.preview); S.form = emptyForm(id); render(); };
+    form.onsubmit = e => { e.preventDefault(); sync(); saveItem(id); };
+  }
+
+  async function fillMissing(id) {
+    S.filling = true; render();
+    const todo = itemsFor(id).filter(i => !i.image && i.url);
+    let got = 0;
+    for (const i of todo) {
+      try {
+        const r = await api('preview', { method: 'POST', body: { url: i.url } });
+        if (r.image) { await api('items/' + i.id, { method: 'PATCH', body: { image: r.image } }); got++; }
+      } catch {}
+    }
+    S.filling = false;
+    toast(got === todo.length ? `Found ${got} ${got === 1 ? 'photo' : 'photos'}` : `Found ${got} of ${todo.length}. For the rest, edit the gift and paste a photo.`);
+    refresh(true);
+  }
+
+  function setImage(file) {
+    if (!S.form) return;
+    if (S.form.preview) URL.revokeObjectURL(S.form.preview);
+    S.form.blob = file; S.form.preview = URL.createObjectURL(file); S.form.status = ''; S.form.warn = false;
+    render();
+  }
+  filePick.onchange = () => { const f = filePick.files[0]; filePick.value = ''; if (f && route() && S.canEdit) setImage(f); };
+
+  // Shrink pasted photos so they load fast for everyone.
+  async function shrink(blob) {
+    try {
+      const bmp = await createImageBitmap(blob);
+      const scale = Math.min(1, 900 / Math.max(bmp.width, bmp.height));
+      const c = document.createElement('canvas'); c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(bmp, 0, 0, c.width, c.height);
+      return await new Promise(r => c.toBlob(b => r(b || blob), 'image/jpeg', 0.86));
+    } catch { return blob; }
+  }
+
+  document.addEventListener('paste', e => {
+    if (!route() || !S.canEdit || !S.form) return;
+    let files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith('image/'));
+    if (!files.length) files = [...(e.clipboardData?.items || [])].filter(it => it.kind === 'file' && it.type.startsWith('image/')).map(it => it.getAsFile()).filter(Boolean);
+    if (files.length) { e.preventDefault(); setImage(files[0]); toast('Photo added'); return; }
+    const txt = (e.clipboardData?.getData('text') || '').trim();
+    const inField = e.target && e.target.matches && e.target.matches('input');
+    if (!inField && /^https?:\/\/\S+$/i.test(txt)) {
+      e.preventDefault(); S.form.url = txt; if (!S.form.title) S.form.title = titleFromUrl(txt); render(); lookUp(txt);
+    }
+  });
+
+  async function saveItem(listId) {
+    if (S.busy) return;
+    const f = S.form;
+    const url = normalizeUrl(f.url);
+    if (!url && !f.title.trim()) { toast('Add a link or an item name first.'); return; }
+    if (url && !safeUrl(url)) { toast('That link doesn’t look right. It should start with https://'); return; }
+    S.busy = true; const btn = app.querySelector('#saveBtn'); if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+    let image = f.image || '';
+    if (f.blob) {
+      try {
+        const small = await shrink(f.blob);
+        const r = await fetch('/api/upload', { method: 'POST', headers: { 'content-type': small.type || 'image/jpeg', 'x-edit-key': S.key }, body: small });
+        const d = await r.json(); if (!r.ok) throw new Error(d.error); image = d.image;
+      } catch (e) { toast(e.message || 'The photo didn’t upload. Saving the gift without it.'); }
+    }
+    const data = { listId, url, title: f.title.trim() || titleFromUrl(url) || host(url), price: parseMoney(f.price), size: (f.size || '').trim(), image };
+    const ok = f.editingId
+      ? await act(api('items/' + f.editingId, { method: 'PATCH', body: data }), 'Changes saved')
+      : await act(api('items', { method: 'POST', body: data }), 'Added to ' + (S.lists.get(listId)?.name || 'the list'));
+    S.busy = false;
+    if (ok) { if (f.preview) URL.revokeObjectURL(f.preview); S.form = emptyForm(listId); }
+    render();
+    if (ok) app.querySelector('#fUrl')?.focus();
+  }
+
+  /* ---------- boot ---------- */
+  window.addEventListener('hashchange', () => { S.confirmDelete = null; S.buying = null; S.filter = 'all'; render(); window.scrollTo(0, 0); });
+
+  (function boot() {
+    const params = new URLSearchParams(location.search);
+    const k = params.get('key');
+    if (k) { saveKey(k); params.delete('key'); const q = params.toString(); history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + location.hash); }
+    S.key = loadKey();
+    render();
+    refresh(true);
+    setInterval(() => { if (document.visibilityState === 'visible') refresh(false); }, 20000);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refresh(false); });
+  })();
+})();
+</script>
+
+<script>
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c=document.getElementById('snow'), g=c.getContext('2d'); let W,H,flakes=[];
+  function size(){ const d=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; c.width=W*d; c.height=H*d; g.setTransform(d,0,0,d,0,0);
+    const n=Math.round(Math.min(90, W*H/16000)); flakes=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,r:1+Math.random()*2.6,s:.3+Math.random()*.8,w:Math.random()*6.28})); }
+  function tick(){ g.clearRect(0,0,W,H); g.fillStyle='rgba(170,190,205,.55)';
+    for(const f of flakes){ f.y+=f.s; f.w+=.01; f.x+=Math.sin(f.w)*.35; if(f.y>H+5){f.y=-5;f.x=Math.random()*W;} g.beginPath(); g.arc(f.x,f.y,f.r,0,6.283); g.fill(); }
+    requestAnimationFrame(tick); }
+  addEventListener('resize', size); size(); tick();
+})();
+</script>
+</body>
+</html>
